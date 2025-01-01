@@ -4,7 +4,7 @@ import { generateThumbHash } from '@/lib/thumbhash'
 
 const urlSchema = z.string().url()
 
-export default async function GET(request: Request) {
+export async function GET(request: Request) {
   const url = new URL(request.url)
   const urlParam = url.searchParams.get('url')
 
