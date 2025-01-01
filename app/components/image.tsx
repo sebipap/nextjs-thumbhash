@@ -19,8 +19,10 @@ export default function Image(props: ImageProps) {
 
   useEffect(() => {
     async function fetchThumbhash() {
+      const url = new URL(props.src ?? '')
+
       const response = await fetch(
-        '/api/thumbhash?url=' + encodeURIComponent(props.src ?? ''),
+        '/api/thumbhash?url=' + encodeURIComponent(url.origin + url.pathname),
         { method: 'GET', cache: 'force-cache' }
       )
       const data = await response.json()
