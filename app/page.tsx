@@ -166,7 +166,7 @@ export default function Home({
             monto
           </Link>{" "}
           and{" "}
-          <Link className="underline" href="https://sebastianpapanicolau.com">
+          <Link className="underline" href="https://github.com/sebipap">
             papa
           </Link>
         </p>
