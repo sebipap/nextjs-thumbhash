@@ -2,8 +2,9 @@
 import Link from "next/link";
 import { CodeSnippet } from "./components/code-snippet";
 import DynamicImage from "./components/dynamic-image";
-import { use } from "react";
+import { use, useState } from "react";
 import { CODE_SNIPPETS } from "./constants/code-snippets";
+import { Playground } from "./components/playground";
 
 export default function Home({
   searchParams,
@@ -18,6 +19,12 @@ export default function Home({
     `https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=${q}`,
     `https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=${q}`,
   ];
+
+  const [thumbHash, setThumbHash] = useState<string | null>(null);
+
+  const onCreate = (thumbHash: string) => {
+    setThumbHash(thumbHash);
+  };
 
   return (
     <>
@@ -87,7 +94,7 @@ export default function Home({
               <CodeSnippet
                 language="bash"
                 code={CODE_SNIPPETS.INSTALL_DEPENDENCIES}
-              ></CodeSnippet>
+              />
             </div>
 
             <div className="mb-6">
@@ -134,6 +141,10 @@ export default function Home({
             <h3 className="text-lg font-semibold mb-2">
               Option 2: Use it with static images, with hardcoded thumbhashes
             </h3>
+            <div className="mb-6 flex flex-col gap-4">
+              <Playground onCreate={onCreate} />
+              <CodeSnippet code={CODE_SNIPPETS.HARDCODED_THUMBHASH(thumbHash)} />
+            </div>
             <p className="mb-4">
               {` Here, you'll hardcode the thumbhash in your component. This is
               useful when you're using static images like a landing page.`}

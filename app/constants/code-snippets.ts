@@ -1,7 +1,7 @@
 export const CODE_SNIPPETS = {
-	INSTALL_DEPENDENCIES: "npm install thumbhash sharp",
+  INSTALL_DEPENDENCIES: 'npm install thumbhash sharp',
 
-	IMAGE_COMPONENT: `"use client";
+  IMAGE_COMPONENT: `"use client";
 
 import { DetailedHTMLProps, ImgHTMLAttributes, useState } from "react";
 import { thumbHashToDataURL } from "thumbhash";
@@ -54,7 +54,7 @@ export default function Image({
   );
 }`,
 
-	BASE64_TO_UINT8_ARRAY: `export default function base64ToUint8Array(base64: string): Uint8Array {
+  BASE64_TO_UINT8_ARRAY: `export default function base64ToUint8Array(base64: string): Uint8Array {
   const decodedString = atob(base64);
   const arrayBuffer = new Uint8Array(decodedString.length);
 
@@ -65,7 +65,7 @@ export default function Image({
   return arrayBuffer;
 }`,
 
-	THUMBHASH_LIB: `import sharp from 'sharp';
+  THUMBHASH_LIB: `import sharp from 'sharp';
 import { rgbaToThumbHash } from 'thumbhash';
 
 export async function generateThumbHash(arrayBuffer: ArrayBuffer) {
@@ -95,7 +95,7 @@ export default function base64ToUint8Array(base64: string): Uint8Array {
 	return arrayBuffer;
 }`,
 
-	GENERATE_THUMBHASH: `import { generateThumbHash } from '@/lib/generateThumbHash';
+  GENERATE_THUMBHASH: `import { generateThumbHash } from '@/lib/generateThumbHash';
 
 // During image upload
 async function handleImageUpload(file: File) {
@@ -110,7 +110,7 @@ async function handleImageUpload(file: File) {
   });
 }`,
 
-	USE_IMAGE_COMPONENT: `import Image from '@/components/Image';
+  USE_IMAGE_COMPONENT: `import Image from '@/components/Image';
 
 export default async function Page() {
   const { imageUrl, thumbhash } = await getFromDatabase();
@@ -124,7 +124,7 @@ export default async function Page() {
   );
 }`,
 
-	DYNAMIC_IMAGE_COMPONENT: `"use client";
+  DYNAMIC_IMAGE_COMPONENT: `"use client";
 import {
   DetailedHTMLProps,
   ImgHTMLAttributes,
@@ -157,7 +157,7 @@ export default function DynamicImage(props: ImageProps) {
 
   return <Image {...props} thumbhash={thumbhash} alt={props.alt} />;
 }`,
-	API_ROUTE: `
+  API_ROUTE: `
 import { generateThumbHash } from '@/lib/generateThumbhash'
 import { z } from 'zod'
 
@@ -200,6 +200,21 @@ export async function GET(request: Request) {
       },
     }
   )
-}`
-};
+}`,
 
+  HARDCODED_THUMBHASH: (
+    thumbhash: string | null
+  ) => `import Image from '@/components/Image';
+
+export default async function Page() {
+  const { imageUrl, thumbhash } = await getFromDatabase();
+
+  return (
+    <Image
+      src={imageUrl}
+      thumbhash={${`'${thumbhash ?? 'YOUR_THUMBHASH'}'`}}
+      alt="Description"
+    />
+  );
+}`,
+}
