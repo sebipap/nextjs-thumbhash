@@ -1,23 +1,20 @@
-"use client";
+import Link from 'next/link'
+import { CodeSnippet } from './components/code-snippet'
+import DemoImage from './components/demo-image'
 
-import Link from "next/link";
-import { use } from "react";
-import { CodeSnippet } from "./components/code-snippet";
-import DemoImage from "./components/demo-image";
-
-export default function Home({
+export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string }>
 }) {
-  const { q } = use(searchParams);
+  const { q } = await searchParams
 
   const images = [
     `https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=${q}`,
     `https://images.unsplash.com/photo-1682687981674-0927add86f2b?q=${q}`,
     `https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=${q}`,
     `https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=${q}`,
-  ];
+  ]
 
   return (
     <>
@@ -37,14 +34,14 @@ export default function Home({
           >
             <h1 className="text-2xl">nextjs-thumbhash</h1>
             <p>
-              A ready to use{" "}
+              A ready to use{' '}
               <Link
                 className="underline"
                 href="https://evanw.github.io/thumbhash/"
               >
                 ThumbHash
-              </Link>{" "}
-              implementation for{" "}
+              </Link>{' '}
+              implementation for{' '}
               <Link className="underline" href="https://nextjs.org">
                 Next.JS
               </Link>
@@ -71,18 +68,18 @@ export default function Home({
             <h2 className="text-xl font-bold mb-4">Installation</h2>
             <div className="mb-6">
               <p className="mb-4">
-                1. Install{" "}
+                1. Install{' '}
                 <Link
                   className="underline"
                   href="https://evanw.github.io/thumbhash/"
                 >
                   ThumbHash
-                </Link>{" "}
+                </Link>{' '}
               </p>
               <CodeSnippet
                 language="bash"
                 code="npm install thumbhash"
-              ></CodeSnippet>
+              />
             </div>
 
             <div className="mb-6">
@@ -290,11 +287,11 @@ export default function MyPage() {
       </div>
       <footer className="max-w-3xl mx-auto py-8 flex justify-between">
         <p>
-          Made with ❤️ by{" "}
+          Made with ❤️ by{' '}
           <Link className="underline" href="https://nicolasmontone.com">
             monto
-          </Link>{" "}
-          and{" "}
+          </Link>{' '}
+          and{' '}
           <Link className="underline" href="https://sebastianpapanicolau.com">
             papa
           </Link>
@@ -316,5 +313,5 @@ export default function MyPage() {
         </Link>
       </footer>
     </>
-  );
+  )
 }
