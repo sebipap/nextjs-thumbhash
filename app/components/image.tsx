@@ -1,62 +1,52 @@
-'use client'
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from 'react'
+"use client";
 
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react'
-import { cn } from '../lib/cn'
-import { thumbHashToDataURL } from 'thumbhash'
-import base64ToUint8Array from '../lib/base64ToUint8Array'
+import { DetailedHTMLProps, ImgHTMLAttributes, useState } from "react";
+import { thumbHashToDataURL } from "thumbhash";
+import base64ToUint8Array from "@/app/lib/base64ToUint8Array";
+import { cn } from "@/app/lib/cn";
 
-type ImageProps = DetailedHTMLProps<
+export type ImageProps = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
   HTMLImageElement
->
+>;
 
-export default function Image(props: ImageProps) {
-  const [thumbhash, setThumbhash] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchThumbhash() {
-      const url = new URL(props.src ?? '')
-
-      const response = await fetch(
-        '/api/thumbhash?url=' + encodeURIComponent(url.origin + url.pathname),
-        { method: 'GET', cache: 'force-cache' }
-      )
-      const data = await response.json()
-      setThumbhash(data.thumbhash)
-    }
-    fetchThumbhash()
-  }, [props.src])
+export default function Image({
+  thumbhash,
+  ...props
+}: ImageProps & { thumbhash: string | null }) {
+  const [loading, setLoading] = useState(true);
 
   return (
     <div className="relative h-full w-full">
       {loading && thumbhash && (
+        // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
         <img
           {...props}
           className={cn(
-            'absolute inset-0 h-full w-full object-cover transition-opacity duration-300 z-1',
+            "absolute inset-0 h-full w-full object-cover transition-opacity duration-300 z-1",
             props.className
           )}
           src={thumbHashToDataURL(base64ToUint8Array(thumbhash))}
         />
       )}
+      {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
       <img
+        {...props}
         className={cn(
-          'absolute inset-0 h-full w-full object-cover transition-opacity duration-300 z-2 opacity-100',
-          loading && 'opacity-0',
+          "absolute inset-0 h-full w-full object-cover transition-opacity duration-300 z-2 opacity-100",
+          loading && "opacity-0",
           props.className
         )}
-        {...props}
-        onLoad={() => setLoading(false)}
+        onLoad={(event) => {
+          setLoading(false);
+          props.onLoad?.(event);
+        }}
         ref={(img) => {
           if (img?.complete) {
-            setLoading(false)
+            setLoading(false);
           }
         }}
       />
     </div>
-  )
+  );
 }
