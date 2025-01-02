@@ -138,21 +138,6 @@ export default function Home({
               {` Here, you'll hardcode the thumbhash in your component. This is
               useful when you're using static images like a landing page.`}
             </p>
-            <h3 className="text-lg font-semibold mb-2">
-              Option 3: Dynamically generate the thumbhash and store it in a KV
-              store
-            </h3>
-            <p className="mb-4">
-              {` What's useful here is that you only need to instanciate a component with <img> props. This works for both image urls that you control and static images you add to your project.`}
-            </p>
-            <p className="mb-4 mt-4">
-              1. Add an API route to handle reading and writing to the KV store
-            </p>
-            <CodeSnippet code={CODE_SNIPPETS.API_ROUTE} />
-            <p className="mb-4 mt-4">
-              2. Create the dynamic image component once
-            </p>
-            <CodeSnippet code={CODE_SNIPPETS.DYNAMIC_IMAGE_COMPONENT} />
           </section>
 
           <section className="mb-4">
