@@ -206,9 +206,7 @@ export async function GET(request: Request) {
     thumbhash: string | null
   ) => `import Image from '@/components/Image';
 
-export default async function Page() {
-  const { imageUrl, thumbhash } = await getFromDatabase();
-
+export default function Page() {
   return (
     <Image
       src={imageUrl}
