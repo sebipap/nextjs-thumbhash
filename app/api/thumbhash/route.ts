@@ -1,6 +1,5 @@
+import { generateThumbHash } from '@/lib/generateThumbhash'
 import { z } from 'zod'
-
-import { generateThumbHash } from '@/lib/thumbhash'
 
 const urlSchema = z.string().url()
 

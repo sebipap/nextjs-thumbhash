@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, use } from "react";
-import { thumbHashToDataURL } from "thumbhash";
-import base64ToUint8Array from "./lib/base64ToUint8Array";
 import Link from "next/link";
-import DemoImage from "./components/demo-image";
+import { use } from "react";
 import { CodeSnippet } from "./components/code-snippet";
+import DemoImage from "./components/demo-image";
 
 export default function Home({
   searchParams,
@@ -14,10 +12,6 @@ export default function Home({
 }) {
   const { q } = use(searchParams);
 
-  const [thumbhash, setThumbhash] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [codeSnippet, setCodeSnippet] = useState<string | null>(null);
-
   const images = [
     `https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=${q}`,
     `https://images.unsplash.com/photo-1682687981674-0927add86f2b?q=${q}`,
@@ -25,86 +19,9 @@ export default function Home({
     `https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=${q}`,
   ];
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setPreview(URL.createObjectURL(file));
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await fetch("/api/generate-thumbhash", {
-      method: "POST",
-      body: formData,
-    });
-
-    const { thumbhash: hash } = await response.json();
-    setThumbhash(hash);
-
-    const snippet = `<Image src=${preview} thumbhash={${hash}} />`;
-
-    setCodeSnippet(snippet);
-  };
-
   return (
     <>
       <div className="min-h-screen text-black">
-        {/* Upload Section */}
-        <div className="p-8 max-w-3xl mx-auto border-b">
-          <h1 className="text-2xl font-bold mb-8">Generate Thumbhash</h1>
-
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleUpload}
-            className="mb-8 block"
-          />
-
-          <div className="grid grid-cols-2 gap-8 mb-8">
-            {preview && (
-              <div>
-                <h2 className="font-bold mb-2">Original Image</h2>
-                <img
-                  src={preview}
-                  className="max-w-full h-auto"
-                  alt="Original"
-                />
-              </div>
-            )}
-
-            {thumbhash && (
-              <div>
-                <h2 className="font-bold mb-2">Thumbhash Preview</h2>
-                <img
-                  src={thumbHashToDataURL(base64ToUint8Array(thumbhash))}
-                  className="max-w-full h-full w-full"
-                  alt="Thumbhash preview"
-                />
-              </div>
-            )}
-          </div>
-
-          {thumbhash && (
-            <div>
-              <h2 className="font-bold mb-2">Your Thumbhash (base64)</h2>
-              <pre className="bg-blue-950 p-4 rounded mb-8 overflow-x-auto">
-                {thumbhash}
-              </pre>
-            </div>
-          )}
-
-          {codeSnippet && (
-            <div>
-              <h2 className="font-bold mb-2">Code Snippet</h2>
-              <pre className="bg-blue-950 p-4 rounded overflow-x-auto">
-                {codeSnippet}
-              </pre>
-            </div>
-          )}
-        </div>
-
-        {/* Demo Gallery Section */}
         <div className="h-screen w-full grid grid-cols-2 grid-rows-2 relative">
           {images.map((image, index) => (
             <DemoImage
@@ -114,7 +31,6 @@ export default function Home({
               className="w-full h-full object-cover"
             />
           ))}
-
           <form
             action=""
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-black p-6 font-mono flex flex-col gap-4"
@@ -343,7 +259,6 @@ export default function MyPage() {
               </li>
             </ol>
           </section>
-
           <section className="mb-4">
             <h2 className="text-xl font-bold">Requirements</h2>
             <ul className="list-disc p-4">
@@ -352,7 +267,6 @@ export default function MyPage() {
               <li>TypeScript</li>
             </ul>
           </section>
-
           <section>
             <h2 className="text-xl font-bold">Notes</h2>
             <ul className="list-disc p-4">
@@ -374,7 +288,7 @@ export default function MyPage() {
           </section>
         </div>
       </div>
-      <footer className="max-w-3xl mx-auto py-8">
+      <footer className="max-w-3xl mx-auto py-8 flex justify-between">
         <p>
           Made with ❤️ by{" "}
           <Link className="underline" href="https://nicolasmontone.com">
@@ -385,6 +299,21 @@ export default function MyPage() {
             papa
           </Link>
         </p>
+        <Link
+          href="https://github.com/sebipap/nextjs-thumbhash"
+          className="flex items-center gap-2 hover:underline"
+        >
+          <svg
+            height="15"
+            width="15"
+            aria-hidden="true"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+          >
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+          </svg>
+          source ode
+        </Link>
       </footer>
     </>
   );
