@@ -12,7 +12,7 @@ export type ImageProps = DetailedHTMLProps<
   HTMLImageElement
 >;
 
-export default function DemoImage(props: ImageProps) {
+export default function DynamicImage(props: ImageProps) {
   const [thumbhash, setThumbhash] = useState<string | null>(null);
 
   useEffect(() => {
