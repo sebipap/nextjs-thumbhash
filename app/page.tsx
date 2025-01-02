@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { CodeSnippet } from "./components/code-snippet";
-import DynamicImage from "./components/dynamic-image";
 import { use, useState } from "react";
 import { CODE_SNIPPETS } from "./constants/code-snippets";
 import { Playground } from "./components/playground";
+import Image from "./components/image";
 
 export default function Home({
   searchParams,
@@ -14,10 +14,22 @@ export default function Home({
   const { q } = use(searchParams);
 
   const images = [
-    `https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=${q}`,
-    `https://images.unsplash.com/photo-1682687981674-0927add86f2b?q=${q}`,
-    `https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=${q}`,
-    `https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=${q}`,
+    {
+      src: `https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=${q}`,
+      thumbhash: "nhgWFYKGd4iPd4eEh2h2iIWPQ/cZ",
+    },
+    {
+      src: `https://images.unsplash.com/photo-1682687981674-0927add86f2b?q=${q}`,
+      thumbhash: "JdcZLQpnh3+Ip4hniIh4h5Zob4r3",
+    },
+    {
+      src: `https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=${q}`,
+      thumbhash: "2AgOFYRnd4hvh3eEeIiIh1AXCHVk",
+    },
+    {
+      src: `https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=${q}`,
+      thumbhash: "VQgOJYJLiJm/dndEaEeWeXeQiAla",
+    },
   ];
 
   const [thumbHash, setThumbHash] = useState<string | null>(null);
@@ -31,9 +43,10 @@ export default function Home({
       <div className="min-h-screen text-black">
         <div className="h-screen w-full grid grid-cols-2 grid-rows-2 relative">
           {images.map((image, index) => (
-            <DynamicImage
-              key={image}
-              src={image}
+            <Image
+              key={image.src}
+              src={image.src}
+              thumbhash={image.thumbhash}
               alt={`Example image ${index + 1}`}
               className="w-full h-full object-cover"
             />
@@ -143,7 +156,9 @@ export default function Home({
             </h3>
             <div className="mb-6 flex flex-col gap-4">
               <Playground onCreate={onCreate} />
-              <CodeSnippet code={CODE_SNIPPETS.HARDCODED_THUMBHASH(thumbHash)} />
+              <CodeSnippet
+                code={CODE_SNIPPETS.HARDCODED_THUMBHASH(thumbHash)}
+              />
             </div>
             <p className="mb-4">
               {` Here, you'll hardcode the thumbhash in your component. This is
