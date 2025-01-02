@@ -1,20 +1,22 @@
-import Link from 'next/link'
-import { CodeSnippet } from './components/code-snippet'
-import DemoImage from './components/demo-image'
+"use client";
+import Link from "next/link";
+import { CodeSnippet } from "./components/code-snippet";
+import DemoImage from "./components/demo-image";
+import { use } from "react";
 
-export default async function Home({
+export default function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const { q } = await searchParams
+  const { q } = use(searchParams);
 
   const images = [
     `https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=${q}`,
     `https://images.unsplash.com/photo-1682687981674-0927add86f2b?q=${q}`,
     `https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=${q}`,
     `https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=${q}`,
-  ]
+  ];
 
   return (
     <>
@@ -34,26 +36,39 @@ export default async function Home({
           >
             <h1 className="text-2xl">nextjs-thumbhash</h1>
             <p>
-              A ready to use{' '}
+              A ready to use{" "}
               <Link
                 className="underline"
                 href="https://evanw.github.io/thumbhash/"
               >
                 ThumbHash
-              </Link>{' '}
-              implementation for{' '}
+              </Link>{" "}
+              implementation for{" "}
               <Link className="underline" href="https://nextjs.org">
                 Next.JS
               </Link>
               .<br /> Show a placeholder while images are loading to avoid
               layout shift.
             </p>
-            <button
-              type="submit"
-              className="p-2 bg-black text-white rounded-md"
-            >
-              Reload to see the magic ✨
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="p-2 bg-black text-white rounded-md flex-1"
+              >
+                Reload to see the magic ✨
+              </button>
+              <button
+                type="button"
+                className="flex-1 border-2 border-black rounded-md"
+                onClick={() => {
+                  document.querySelector("#installation")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                Check out docs
+              </button>
+            </div>
             <input
               name="q"
               type="hidden"
@@ -62,24 +77,16 @@ export default async function Home({
           </form>
         </div>
       </div>
-      <div>
+      <div id="installation">
         <div className="max-w-3xl mx-auto">
           <section className="mb-12 mt-8">
             <h2 className="text-xl font-bold mb-4">Installation</h2>
             <div className="mb-6">
-              <p className="mb-4">
-                1. Install{' '}
-                <Link
-                  className="underline"
-                  href="https://evanw.github.io/thumbhash/"
-                >
-                  ThumbHash
-                </Link>{' '}
-              </p>
+              <p className="mb-4">1. Install dependencies</p>
               <CodeSnippet
                 language="bash"
-                code="npm install thumbhash"
-              />
+                code="npm install thumbhash sharp"
+              ></CodeSnippet>
             </div>
 
             <div className="mb-6">
@@ -287,11 +294,11 @@ export default function MyPage() {
       </div>
       <footer className="max-w-3xl mx-auto py-8 flex justify-between">
         <p>
-          Made with ❤️ by{' '}
+          Made with ❤️ by{" "}
           <Link className="underline" href="https://nicolasmontone.com">
             monto
-          </Link>{' '}
-          and{' '}
+          </Link>{" "}
+          and{" "}
           <Link className="underline" href="https://sebastianpapanicolau.com">
             papa
           </Link>
@@ -313,5 +320,5 @@ export default function MyPage() {
         </Link>
       </footer>
     </>
-  )
+  );
 }
